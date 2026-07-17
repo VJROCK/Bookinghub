@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "description": "BookingHub - Advertisement Booking System (React + SQLite)",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
     "setup": "npm install --prefix server && npm install --prefix client",
     "server": "npm start --prefix server",
