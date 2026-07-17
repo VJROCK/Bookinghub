@@ -1,0 +1,17 @@
+{
+  "name": "bookinghub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BookingHub - Advertisement Booking System (React + SQLite)",
+  "scripts": {
+    "setup": "npm install --prefix server && npm install --prefix client",
+    "server": "npm start --prefix server",
+    "client": "npm run dev --prefix client",
+    "dev": "node scripts/dev.js",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
