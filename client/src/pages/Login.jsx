@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, setSession } from '../api';
 
-/* Manual 3.1 — Login screen with Center, Branch, User Name, Password */
+/* Premium Login — Split layout with branded sidebar */
 export default function Login({ onLogin }) {
   const [boot, setBoot] = useState({ centers: [], branches: [] });
   const [form, setForm] = useState({ center_id: '', branch_id: '', username: '', password: '' });
@@ -28,36 +28,78 @@ export default function Login({ onLogin }) {
 
   return (
     <div className="login-wrap">
+      {/* Floating decorative elements */}
+      <div className="login-decor">
+        <div className="decor-circle c1" />
+        <div className="decor-circle c2" />
+        <div className="decor-circle c3" />
+      </div>
+
       <form className="login-box" onSubmit={submit}>
-        <div className="logo">Booking<span>Hub</span></div>
-        <div className="sub">Advertisement Booking System — Classified &amp; Display</div>
-        {err && <div className="login-err">{err}</div>}
-        <div className="field">
-          <label>Center</label>
-          <select value={form.center_id} onChange={(e) => set('center_id', e.target.value)}>
-            <option value="">-- select publication center --</option>
-            {(boot.centers || []).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
+        <div className="login-header">
+          <div className="logo">Booking<span>Hub</span></div>
+          <div className="sub">Advertisement Booking System</div>
+          <div className="sub-detail">Classified & Display Management Platform</div>
         </div>
-        <div className="field">
-          <label>Branch</label>
-          <select value={form.branch_id} onChange={(e) => set('branch_id', e.target.value)}>
-            <option value="">-- select branch --</option>
-            {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
-          </select>
+
+        {err && <div className="login-err">⚠ {err}</div>}
+
+        <div className="login-fields">
+          <div className="field">
+            <label>Publication Center</label>
+            <div className="input-icon">
+              <span className="icon">🏢</span>
+              <select id="center" name="center" value={form.center_id} onChange={(e) => set('center_id', e.target.value)}>
+                <option value="">— Select Center —</option>
+                {(boot.centers || []).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Branch Office</label>
+            <div className="input-icon">
+              <span className="icon">📍</span>
+              <select id="branch" name="branch" value={form.branch_id} onChange={(e) => set('branch_id', e.target.value)}>
+                <option value="">— Select Branch —</option>
+                {branches.map((b) => <option key={b.id} value={b.id}>{b.name}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Username</label>
+            <div className="input-icon">
+              <span className="icon">👤</span>
+              <input id="username" name="username" autoFocus autoComplete="username" placeholder="Enter your username" value={form.username} onChange={(e) => set('username', e.target.value)} />
+            </div>
+          </div>
+
+          <div className="field">
+            <label>Password</label>
+            <div className="input-icon">
+              <span className="icon">🔒</span>
+              <input id="password" name="password" type="password" autoComplete="current-password" placeholder="Enter your password" value={form.password} onChange={(e) => set('password', e.target.value)} />
+            </div>
+          </div>
         </div>
-        <div className="field">
-          <label>User Name</label>
-          <input autoFocus value={form.username} onChange={(e) => set('username', e.target.value)} />
-        </div>
-        <div className="field">
-          <label>Password</label>
-          <input type="password" value={form.password} onChange={(e) => set('password', e.target.value)} />
-        </div>
-        <button className="btn" style={{ width: '100%', marginTop: 6, padding: 9 }} disabled={busy}>
-          {busy ? 'Checking...' : 'Submit'}
+
+        <button className="btn login-btn" style={{ width: '100%', marginTop: 8 }} disabled={busy}>
+          {busy ? (
+            <><span className="spinner" /> Authenticating...</>
+          ) : (
+            'Sign In →'
+          )}
         </button>
-        <div className="hint">Demo users: <b>admin/admin123</b> · booking/booking123 · auditor/audit123</div>
+
+        <div className="hint">
+          <div className="hint-label">Demo Credentials</div>
+          <div className="hint-creds">
+            <span><b>admin</b> / admin123</span>
+            <span><b>booking</b> / booking123</span>
+            <span><b>auditor</b> / audit123</span>
+          </div>
+        </div>
       </form>
     </div>
   );
