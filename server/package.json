@@ -8,10 +8,11 @@
     "seed": "node db/seed.js --reset"
   },
   "dependencies": {
+    "better-sqlite3": "^12.11.1",
     "cors": "^2.8.6",
     "express": "^4.22.2"
   },
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=18.0.0"
   }
 }

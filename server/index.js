@@ -33,5 +33,10 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: err.message || 'Server error' });
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`BookingHub server running on http://localhost:${PORT}`));
+// Only listen when running locally (not on Vercel serverless)
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => console.log(`BookingHub server running on http://localhost:${PORT}`));
+}
+
+module.exports = app;

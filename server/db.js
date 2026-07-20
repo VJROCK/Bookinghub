@@ -1,19 +1,34 @@
 /**
  * BookingHub database layer.
- * Uses Node's built-in SQLite (node:sqlite) — no native compilation needed (Node >= 22.13).
+ * Uses better-sqlite3 — works both locally and on Vercel Serverless Functions.
  * Master tables are generated from mastersConfig.js; transaction/system tables are defined here.
  */
-const { DatabaseSync } = require('node:sqlite');
+const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 const { MASTERS } = require('./mastersConfig');
 
-const DB_PATH = process.env.BOOKINGHUB_DB || path.join(__dirname, 'db', 'bookinghub.sqlite');
-fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+/* On Vercel serverless, the bundled filesystem is read-only.
+   We copy the DB to /tmp so SQLite can open it in WAL mode.            */
+const IS_SERVERLESS = !!process.env.VERCEL;
+const BUNDLED_DB = path.join(__dirname, 'db', 'bookinghub.sqlite');
+const TMP_DB = '/tmp/bookinghub.sqlite';
 
-const db = new DatabaseSync(DB_PATH);
-db.exec('PRAGMA journal_mode = WAL;');
-db.exec('PRAGMA foreign_keys = ON;');
+let DB_PATH;
+if (IS_SERVERLESS) {
+  if (!fs.existsSync(TMP_DB) && fs.existsSync(BUNDLED_DB)) {
+    fs.copyFileSync(BUNDLED_DB, TMP_DB);
+  }
+  DB_PATH = TMP_DB;
+} else {
+  DB_PATH = process.env.BOOKINGHUB_DB || path.join(__dirname, 'db', 'bookinghub.sqlite');
+  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+}
+
+const db = new Database(DB_PATH);
+db.pragma('journal_mode = WAL');
+db.pragma('foreign_keys = ON');
+
 
 const colType = (t) => (t === 'number' ? 'REAL' : t === 'check' ? 'INTEGER' : t === 'select' ? 'INTEGER' : 'TEXT');
 
