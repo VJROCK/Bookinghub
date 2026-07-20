@@ -8,8 +8,12 @@ export default function Login({ onLogin }) {
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
-  useEffect(() => { api.get('/api/auth/bootstrap').then(setBoot).catch(() => {}); }, []);
-  const branches = boot.branches.filter((b) => !form.center_id || b.pub_center_id === Number(form.center_id));
+  useEffect(() => {
+    api.get('/api/auth/bootstrap')
+      .then((d) => setBoot({ centers: [], branches: [], ...d }))
+      .catch(() => {});
+  }, []);
+  const branches = (boot.branches || []).filter((b) => !form.center_id || b.pub_center_id === Number(form.center_id));
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async (e) => {
@@ -32,7 +36,7 @@ export default function Login({ onLogin }) {
           <label>Center</label>
           <select value={form.center_id} onChange={(e) => set('center_id', e.target.value)}>
             <option value="">-- select publication center --</option>
-            {boot.centers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+            {(boot.centers || []).map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
         </div>
         <div className="field">
