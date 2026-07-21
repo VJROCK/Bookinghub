@@ -4,8 +4,7 @@ import { api, isLoggedIn, getUser, setSession } from './api';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import MasterPage from './pages/MasterPage';
-import AgencyClientMasters from './pages/AgencyClientMasters';
-import ExecutiveRetainerMasters from './pages/ExecutiveRetainerMasters';
+import TabbedMastersContainer from './pages/TabbedMastersContainer';
 import BookingPage from './pages/BookingPage';
 import QBC from './pages/QBC';
 import { ConfirmAds, BookingAudit, PublishAudit, RateAudit } from './pages/WorkflowPages';
@@ -30,6 +29,15 @@ const SETTINGS_LINKS = [
   ['permissions', 'Master/User/Role Permission'], ['form-names', 'Form Name'],
   ['generate-ref-file', 'Generate Ref File'], ['preferences', 'Preferences'], ['copy-rate', 'Copy Rate'],
 ];
+
+const CONSOLIDATED_GROUPS = {
+  'Agency/Client Masters': { path: '/masters/agency-client', label: 'Agency / Client Masters' },
+  'Executive/Retainer Masters': { path: '/masters/executive-retainer', label: 'Executive / Retainer Masters' },
+  'Environment Masters': { path: '/masters/environment', label: 'Environment Masters' },
+  'Ad Category': { path: '/masters/ad-category', label: 'Ad Category Masters' },
+  'Publication Masters': { path: '/masters/publication', label: 'Publication Masters' },
+  'Rate Masters': { path: '/masters/rate', label: 'Rate Masters' }
+};
 
 function Sidebar({ masters, reports }) {
   const [q, setQ] = useState('');
@@ -60,17 +68,14 @@ function Sidebar({ masters, reports }) {
         <NavLink to="/">🏠 Dashboard</NavLink>
         <Sec name="Masters">
           {Object.entries(groups).map(([grp, items]) => {
+            const consolidated = CONSOLIDATED_GROUPS[grp];
+            if (!consolidated) return null;
             const vis = items.filter((m) => match(m.label));
-            if (!vis.length) return null;
+            if (!match(consolidated.label) && !vis.length) return null;
             return (
               <div key={grp}>
                 <div className="nav-grp">{grp}</div>
-                {grp === 'Agency/Client Masters'
-                  ? <NavLink to="/masters/agency-client">Agency/Client Masters</NavLink>
-                  : grp === 'Executive/Retainer Masters'
-                  ? <NavLink to="/masters/executive-retainer">Executive/Retainer Masters</NavLink>
-                  : vis.map((m) => <NavLink key={m.key} to={`/masters/${m.key}`}>{m.label}</NavLink>)
-                }
+                <NavLink to={consolidated.path}>{consolidated.label}</NavLink>
               </div>
             );
           })}
@@ -130,8 +135,9 @@ function Shell() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/masters/agency-client" element={<AgencyClientMasters masters={masters} />} />
-            <Route path="/masters/executive-retainer" element={<ExecutiveRetainerMasters masters={masters} />} />
+            {Object.entries(CONSOLIDATED_GROUPS).map(([grp, conf]) => (
+              <Route key={grp} path={conf.path} element={<TabbedMastersContainer masters={masters} groupName={grp} title={conf.label} />} />
+            ))}
             <Route path="/masters/:key" element={<MasterPage masters={masters} />} />
             <Route path="/transactions/display-booking" element={<BookingPage adType="DISPLAY" key="d" />} />
             <Route path="/transactions/classified-booking" element={<BookingPage adType="CLASSIFIED" key="c" />} />

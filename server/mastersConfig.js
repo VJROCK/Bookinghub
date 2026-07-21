@@ -232,7 +232,7 @@ const MASTERS = [
   },
   { key: 'payment_mode', label: 'Payment Mode', group: 'Environment Masters', section: '4.28', fields: [f('name', 'Payment Mode', 'text', { req: 1 })] },
   { key: 'status_master', label: 'Status', group: 'Environment Masters', section: '4.29', fields: [f('name', 'Status Name', 'text', { req: 1 })] },
-  { key: 'ad_type', label: 'Ad Type', group: 'Environment Masters', section: '4.30', fields: nameAlias('Ad Type Name') },
+  { key: 'ad_type', label: 'Ad Type', group: 'Ad Category', section: '4.30', fields: nameAlias('Ad Type Name') },
   {
     key: 'currency', label: 'Currency', group: 'Environment Masters', section: '4.31',
     fields: [sel('country_id', 'Country Name', 'country'), ...nameAlias('Currency Name')],
@@ -255,7 +255,7 @@ const MASTERS = [
     ],
   },
   {
-    key: 'ad_category', label: 'Ad Category', group: 'Environment Masters', section: '4.36',
+    key: 'ad_category', label: 'Ad Category', group: 'Ad Category', section: '4.36',
     fields: [
       sel('ad_type_id', 'Ad Type', 'ad_type', { req: 1 }),
       ...nameAlias('Ad Category Name'),
@@ -263,12 +263,12 @@ const MASTERS = [
       opt('publish_day', 'Ad Category Day', ['', 'SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']),
     ],
   },
-  { key: 'ad_sub_category', label: 'Ad Sub Category', group: 'Environment Masters', section: '4.37', fields: [sel('ad_category_id', 'Ad Category Name', 'ad_category', { req: 1 }), ...nameAlias('Ad Sub Category Name')] },
-  { key: 'ad_sub_category3', label: 'Ad Sub Category 3', group: 'Environment Masters', section: '4.38', fields: [sel('ad_sub_category_id', 'Ad Sub Category', 'ad_sub_category', { req: 1 }), ...nameAlias('Ad Sub Category 3 Name')] },
-  { key: 'ad_sub_category4', label: 'Ad Sub Category 4', group: 'Environment Masters', section: '4.39', fields: [sel('ad_sub_category3_id', 'Ad Sub Category 3', 'ad_sub_category3', { req: 1 }), ...nameAlias('Ad Sub Category 4 Name')] },
-  { key: 'ad_sub_category5', label: 'Ad Sub Category 5', group: 'Environment Masters', section: '4.40', fields: [sel('ad_sub_category4_id', 'Ad Sub Category 4', 'ad_sub_category4', { req: 1 }), ...nameAlias('Ad Sub Category 5 Name')] },
+  { key: 'ad_sub_category', label: 'Ad Sub Category', group: 'Ad Category', section: '4.37', fields: [sel('ad_category_id', 'Ad Category Name', 'ad_category', { req: 1 }), ...nameAlias('Ad Sub Category Name')] },
+  { key: 'ad_sub_category3', label: 'Ad Sub Category 3', group: 'Ad Category', section: '4.38', fields: [sel('ad_sub_category_id', 'Ad Sub Category', 'ad_sub_category', { req: 1 }), ...nameAlias('Ad Sub Category 3 Name')] },
+  { key: 'ad_sub_category4', label: 'Ad Sub Category 4', group: 'Ad Category', section: '4.39', fields: [sel('ad_sub_category3_id', 'Ad Sub Category 3', 'ad_sub_category3', { req: 1 }), ...nameAlias('Ad Sub Category 4 Name')] },
+  { key: 'ad_sub_category5', label: 'Ad Sub Category 5', group: 'Ad Category', section: '4.40', fields: [sel('ad_sub_category4_id', 'Ad Sub Category 4', 'ad_sub_category4', { req: 1 }), ...nameAlias('Ad Sub Category 5 Name')] },
   {
-    key: 'category_sequence', label: 'Category Sequence', group: 'Environment Masters', section: '4.41',
+    key: 'category_sequence', label: 'Category Sequence', group: 'Ad Category', section: '4.41',
     fields: [
       opt('day', 'Day', ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY']),
       sel('center_id', 'Center', 'pub_center'),
