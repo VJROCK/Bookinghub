@@ -4,6 +4,8 @@ import { api, isLoggedIn, getUser, setSession } from './api';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import MasterPage from './pages/MasterPage';
+import AgencyClientMasters from './pages/AgencyClientMasters';
+import ExecutiveRetainerMasters from './pages/ExecutiveRetainerMasters';
 import BookingPage from './pages/BookingPage';
 import QBC from './pages/QBC';
 import { ConfirmAds, BookingAudit, PublishAudit, RateAudit } from './pages/WorkflowPages';
@@ -63,7 +65,12 @@ function Sidebar({ masters, reports }) {
             return (
               <div key={grp}>
                 <div className="nav-grp">{grp}</div>
-                {vis.map((m) => <NavLink key={m.key} to={`/masters/${m.key}`}>{m.label}</NavLink>)}
+                {grp === 'Agency/Client Masters'
+                  ? <NavLink to="/masters/agency-client">Agency/Client Masters</NavLink>
+                  : grp === 'Executive/Retainer Masters'
+                  ? <NavLink to="/masters/executive-retainer">Executive/Retainer Masters</NavLink>
+                  : vis.map((m) => <NavLink key={m.key} to={`/masters/${m.key}`}>{m.label}</NavLink>)
+                }
               </div>
             );
           })}
@@ -123,6 +130,8 @@ function Shell() {
         <div className="content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/masters/agency-client" element={<AgencyClientMasters masters={masters} />} />
+            <Route path="/masters/executive-retainer" element={<ExecutiveRetainerMasters masters={masters} />} />
             <Route path="/masters/:key" element={<MasterPage masters={masters} />} />
             <Route path="/transactions/display-booking" element={<BookingPage adType="DISPLAY" key="d" />} />
             <Route path="/transactions/classified-booking" element={<BookingPage adType="CLASSIFIED" key="c" />} />

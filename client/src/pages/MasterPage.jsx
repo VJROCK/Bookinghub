@@ -9,8 +9,9 @@ import { Field, DataTable, Toolbar, Tabs, Msg, Modal } from '../components';
  * Complex masters (Agency, Client, Retainer, ...) additionally get their detail tabs
  * (Commission Details, Pay Mode, Contacts, Bank Guarantee, ...).
  */
-export default function MasterPage({ masters }) {
-  const { key } = useParams();
+export default function MasterPage({ masters, masterKey, hideHeader }) {
+  const { key: routeKey } = useParams();
+  const key = masterKey || routeKey;
   const meta = masters.find((m) => m.key === key);
   const [rows, setRows] = useState([]);
   const [form, setForm] = useState({});
@@ -110,9 +111,13 @@ export default function MasterPage({ masters }) {
 
   return (
     <div>
-      <h2>{meta.label} Master</h2>
-      <div className="muted" style={{ marginBottom: 8 }}>Section {meta.section} · {meta.group}</div>
-      {meta.help && <div className="help">{meta.help}</div>}
+      {!hideHeader && (
+        <>
+          <h2>{meta.label} Master</h2>
+          <div className="muted" style={{ marginBottom: 8 }}>Section {meta.section} · {meta.group}</div>
+          {meta.help && <div className="help">{meta.help}</div>}
+        </>
+      )}
       <Msg {...msg} />
 
       <div className="panel">
